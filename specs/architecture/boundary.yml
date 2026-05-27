@@ -1,0 +1,6 @@
+version: 2
+id: "backend"
+level: 1
+role: backend
+type: web-service
+description: "backend Java Spring Boot backend service"
