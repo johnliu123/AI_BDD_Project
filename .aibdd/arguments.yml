@@ -128,7 +128,7 @@ RED_PREHANDLING_HOOK_REF: ${AIBDD_CONFIG_DIR}/bdd-stack/prehandling-before-red-p
 STARTER_VARIANT: python-e2e
 
 # -----------------------------------------------------------------------------
-# 7. PYTHON_E2E_STARTER_OUTPUT_PATHS ??walking skeleton ?賡?嚗 /aibdd-auto-starter ?Ｗ撖阡?蝣潦?
+# 7. PYTHON_E2E_STARTER_OUTPUT_PATHS - walking skeleton output paths for /aibdd-auto-starter
 # -----------------------------------------------------------------------------
 
 PY_APP_DIR: app
