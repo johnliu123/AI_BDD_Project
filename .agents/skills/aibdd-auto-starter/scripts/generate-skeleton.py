@@ -345,7 +345,7 @@ def main() -> None:
         )
         sys.exit(1)
 
-    with open(arguments_yml) as f:
+    with open(arguments_yml, encoding="utf-8") as f:
         args_data = yaml.safe_load(f) or {}
 
     args_rel = args_data.get("AIBDD_ARGUMENTS_PATH", ".aibdd/arguments.yml")

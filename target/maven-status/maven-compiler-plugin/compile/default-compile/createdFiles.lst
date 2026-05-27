@@ -1,0 +1,4 @@
+com\example\backend\Application.class
+com\example\backend\security\CurrentUser.class
+com\example\backend\controller\HealthController.class
+com\example\backend\security\JwtTokenFilter.class
