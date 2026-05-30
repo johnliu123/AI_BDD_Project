@@ -1,0 +1,121 @@
+{
+  "status": "completed",
+  "phase": "Phase 3 - 設定秘密數字 / RED",
+  "task_id": "red-execute-02-set-secret",
+  "target_feature_files": [
+    "specs/packages/01-雙人猜數字對戰/features/02-設定秘密數字.feature"
+  ],
+  "runtime_feature_files": [
+    "tests/features/01-雙人猜數字對戰/02-設定秘密數字.feature"
+  ],
+  "behavior_test_report": {
+    "kind": "behavior_test_report",
+    "runner": "behave",
+    "command": "python -m behave tests/features",
+    "environment_overrides": ["PYTHONUTF8=1", "TESTCONTAINERS_RYUK_DISABLED=true"],
+    "target_feature_files": [
+      "tests/features/01-雙人猜數字對戰/02-設定秘密數字.feature"
+    ],
+    "summary": {
+      "features_passed": 2,
+      "features_failed": 1,
+      "scenarios_passed": 13,
+      "scenarios_failed": 10,
+      "steps_passed": 80,
+      "steps_failed": 10,
+      "steps_skipped": 2
+    },
+    "first_failure": {
+      "type": "assertion_failed",
+      "location": "tests/features/01-雙人猜數字對戰/02-設定秘密數字.feature:6",
+      "message": "Expected message '遊戲必須已滿兩位玩家', got 'Not Found'; body={'detail': 'Not Found', '__http': {'status_class': 'failure', 'status_code': 404}}"
+    },
+    "report_path": "specs/plans/001-1A2B雙人猜數字/reports/red-behavior-report-02-設定秘密數字.json"
+  },
+  "scenario_reports": [
+    {
+      "feature_file": "tests/features/01-雙人猜數字對戰/02-設定秘密數字.feature",
+      "classification": "value_difference",
+      "reason": "runtime endpoint POST /api/games/{gameId}/secrets is not implemented yet, so behavior assertions receive 404 Not Found instead of specified secret-setting responses"
+    }
+  ],
+  "red_type": "value_difference",
+  "runtime_refs_snapshot": {
+    "acceptance_runner": ".aibdd/bdd-stack/acceptance-runner.md",
+    "step_definitions": ".aibdd/bdd-stack/step-definitions.md",
+    "fixtures": ".aibdd/bdd-stack/fixtures.md",
+    "feature_archive": ".aibdd/bdd-stack/feature-archive.md",
+    "pre_red_hook": ".aibdd/bdd-stack/prehandling-before-red-phase.md"
+  },
+  "step_defs_touched": [
+    "tests/features/steps/雙人猜數字對戰/secret_steps.py"
+  ],
+  "pre_red_files_touched": [],
+  "dsl_mapping": [
+    {
+      "dsl_entry_id": "one_a_two_b.set_secret.invoke",
+      "matched_l1": "玩家 {玩家ID} 在遊戲 {遊戲ID} 設定秘密數字 {秘密數字}",
+      "step_def_path": "tests/features/steps/雙人猜數字對戰/secret_steps.py",
+      "preset_tuple": "web-backend / operation-invoke",
+      "target_part_path": "specs/contracts/one-a-two-b-game.api.yml#/paths/~1games~1{gameId}~1secrets/post",
+      "binding_keys": ["玩家ID", "遊戲ID", "秘密數字"],
+      "failure_classification": "value_difference"
+    },
+    {
+      "dsl_entry_id": "one_a_two_b.secret_state.build",
+      "matched_l1": "玩家 {玩家ID} 在遊戲 {遊戲ID} 已設定秘密數字 {秘密數字}",
+      "step_def_path": "tests/features/steps/雙人猜數字對戰/secret_steps.py",
+      "preset_tuple": "web-backend / state-builder",
+      "target_part_path": "specs/data/one-a-two-b-game.dbml#secrets",
+      "binding_keys": ["玩家ID", "遊戲ID", "秘密數字"],
+      "failure_classification": "n/a"
+    },
+    {
+      "dsl_entry_id": "one_a_two_b.game_state.build",
+      "matched_l1": "已存在遊戲 {遊戲ID} 且狀態為 {遊戲狀態}",
+      "step_def_path": "tests/features/steps/雙人猜數字對戰/game_pairing_steps.py",
+      "preset_tuple": "web-backend / state-builder",
+      "target_part_path": "specs/data/one-a-two-b-game.dbml#games",
+      "binding_keys": ["遊戲ID", "遊戲狀態"],
+      "failure_classification": "n/a"
+    },
+    {
+      "dsl_entry_id": "one_a_two_b.player_state.build",
+      "matched_l1": "遊戲 {遊戲ID} 已有玩家 {玩家名稱} 擔任 {玩家角色}",
+      "step_def_path": "tests/features/steps/雙人猜數字對戰/game_pairing_steps.py",
+      "preset_tuple": "web-backend / state-builder",
+      "target_part_path": "specs/data/one-a-two-b-game.dbml#players",
+      "binding_keys": ["遊戲ID", "玩家名稱", "玩家角色"],
+      "failure_classification": "n/a"
+    },
+    {
+      "dsl_entry_id": "one_a_two_b.error_message.verify_response",
+      "matched_l1": "錯誤訊息應為 {錯誤訊息}",
+      "step_def_path": "tests/features/steps/雙人猜數字對戰/game_pairing_steps.py",
+      "preset_tuple": "web-backend / operation-response-success-and-failure",
+      "target_part_path": "specs/contracts/one-a-two-b-game.api.yml#/components/schemas/ErrorResponse/properties/message",
+      "binding_keys": ["錯誤訊息"],
+      "failure_classification": "value_difference"
+    },
+    {
+      "dsl_entry_id": "one_a_two_b.response_phase.verify_response",
+      "matched_l1": "回應遊戲狀態應為 {遊戲狀態}",
+      "step_def_path": "tests/features/steps/雙人猜數字對戰/game_pairing_steps.py",
+      "preset_tuple": "web-backend / operation-response-success-and-failure",
+      "target_part_path": "specs/contracts/one-a-two-b-game.api.yml#/components/schemas/GamePhase",
+      "binding_keys": ["遊戲狀態"],
+      "failure_classification": "value_difference"
+    },
+    {
+      "dsl_entry_id": "one_a_two_b.game_phase.verify",
+      "matched_l1": "遊戲 {遊戲ID} 狀態應為 {遊戲狀態}",
+      "step_def_path": "tests/features/steps/雙人猜數字對戰/game_pairing_steps.py",
+      "preset_tuple": "web-backend / state-verifier",
+      "target_part_path": "specs/data/one-a-two-b-game.dbml#games.phase",
+      "binding_keys": ["遊戲ID", "遊戲狀態"],
+      "failure_classification": "value_difference"
+    }
+  ],
+  "loop_iterations": 1,
+  "stop_reason": "none"
+}

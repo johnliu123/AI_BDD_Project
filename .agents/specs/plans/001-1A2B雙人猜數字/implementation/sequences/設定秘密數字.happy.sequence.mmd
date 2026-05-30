@@ -1,0 +1,22 @@
+sequenceDiagram
+    actor Player as 玩家
+    participant API as SecretRouter.setSecret
+    participant Service as SetSecretService
+    participant Rules as SecretNumberRules
+    participant Repo as GameRepository
+    participant DB as games / players / secrets
+
+    Player->>API: POST /games/{gameId}/secrets(playerId, secret)
+    API->>Service: set_secret(gameId, playerId, secret)
+    Service->>Rules: validate_four_unique_digits(secret)
+    Service->>Repo: load_game_with_players_and_secrets(gameId)
+    Repo->>DB: read game aggregate
+    Service->>Rules: ensure_p1_then_p2_order(game, player)
+    Service->>Repo: save_secret(playerId, secret)
+    Repo->>DB: insert secrets
+    alt both players have secrets
+        Service->>Repo: update phase=GUESSING
+        Repo->>DB: update games
+    end
+    Service-->>API: GameStateResponse
+    API-->>Player: phase

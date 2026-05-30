@@ -1,0 +1,254 @@
+openapi: 3.0.3
+info:
+  title: 1A2B 雙人猜數字對戰 API
+  version: 0.1.0
+  description: 支援玩家進入遊戲配對、設定與修改秘密數字、提交猜測並判定勝負。
+paths:
+  /games:
+    post:
+      tags: [Games]
+      operationId: enterGame
+      summary: 進入遊戲配對
+      description: 以遊戲 ID 與玩家名稱建立新遊戲或加入尚未進入猜題階段的既有遊戲。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnterGameRequest'
+      responses:
+        '200':
+          description: 玩家已建立或加入遊戲
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterGameResponse'
+        '400':
+          description: 輸入格式不合法或同一玩家重複加入
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: 該遊戲已滿，請選擇其他遊戲
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /games/{gameId}/secrets:
+    post:
+      tags: [Secrets]
+      operationId: setSecret
+      summary: 設定秘密數字
+      description: 玩家依 P1 後 P2 的順序設定 4 位且數字不重複的秘密答案。
+      parameters:
+        - $ref: '#/components/parameters/GameIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetSecretRequest'
+      responses:
+        '200':
+          description: 秘密答案已設定；若兩位玩家皆已設定，遊戲進入猜題階段
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameStateResponse'
+        '400':
+          description: 秘密答案格式不合法或設定順序不符
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 找不到遊戲或玩家
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /games/{gameId}/secrets/{playerId}:
+    patch:
+      tags: [Secrets]
+      operationId: changeSecret
+      summary: 修改秘密數字
+      description: 玩家在進入猜題階段前，最多一次修改自己已設定好的秘密答案。
+      parameters:
+        - $ref: '#/components/parameters/GameIdPath'
+        - $ref: '#/components/parameters/PlayerIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeSecretRequest'
+      responses:
+        '200':
+          description: 秘密答案已修改
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameStateResponse'
+        '400':
+          description: 修改時機、修改次數或答案格式不合法
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 找不到遊戲或玩家
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /games/{gameId}/guesses:
+    post:
+      tags: [Guesses]
+      operationId: submitGuess
+      summary: 提交猜測
+      description: 玩家於猜題階段提交 4 位數字猜測，系統回傳幾A幾B；4A 時紀錄勝者並結束遊戲。
+      parameters:
+        - $ref: '#/components/parameters/GameIdPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitGuessRequest'
+      responses:
+        '200':
+          description: 猜測結果
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuessResultResponse'
+        '400':
+          description: 遊戲狀態或猜測格式不合法
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 找不到遊戲或玩家
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  parameters:
+    GameIdPath:
+      name: gameId
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^[A-Za-z0-9]{3,5}$'
+    PlayerIdPath:
+      name: playerId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    EnterGameRequest:
+      type: object
+      required: [gameId, playerName]
+      properties:
+        gameId:
+          type: string
+          pattern: '^[A-Za-z0-9]{3,5}$'
+        playerName:
+          type: string
+          minLength: 3
+          maxLength: 10
+    EnterGameResponse:
+      type: object
+      required: [gameId, playerId, role, phase]
+      properties:
+        gameId:
+          type: string
+        playerId:
+          type: string
+        role:
+          $ref: '#/components/schemas/PlayerRole'
+        phase:
+          $ref: '#/components/schemas/GamePhase'
+        message:
+          type: string
+    SetSecretRequest:
+      type: object
+      required: [playerId, secret]
+      properties:
+        playerId:
+          type: string
+        secret:
+          type: string
+          pattern: '^(?!.*(.).*\\1)[0-9]{4}$'
+    ChangeSecretRequest:
+      type: object
+      required: [secret]
+      properties:
+        secret:
+          type: string
+          pattern: '^(?!.*(.).*\\1)[0-9]{4}$'
+    SubmitGuessRequest:
+      type: object
+      required: [playerId, guess]
+      properties:
+        playerId:
+          type: string
+        guess:
+          type: string
+          pattern: '^[0-9]{4}$'
+    GameStateResponse:
+      type: object
+      required: [gameId, phase]
+      properties:
+        gameId:
+          type: string
+        phase:
+          $ref: '#/components/schemas/GamePhase'
+        winnerId:
+          type: string
+          nullable: true
+    GuessResultResponse:
+      type: object
+      required: [gameId, playerId, a, b, result, isWin, phase]
+      properties:
+        gameId:
+          type: string
+        playerId:
+          type: string
+        a:
+          type: integer
+          minimum: 0
+          maximum: 4
+        b:
+          type: integer
+          minimum: 0
+          maximum: 4
+        result:
+          type: string
+          example: 1A2B
+        isWin:
+          type: boolean
+        winnerId:
+          type: string
+          nullable: true
+        phase:
+          $ref: '#/components/schemas/GamePhase'
+    GamePhase:
+      type: string
+      enum: [WAITING_FOR_PLAYERS, SETTING_SECRETS, GUESSING, FINISHED]
+    PlayerRole:
+      type: string
+      enum: [P1, P2]
+    ErrorResponse:
+      type: object
+      required: [message, code]
+      properties:
+        message:
+          type: string
+        code:
+          type: string

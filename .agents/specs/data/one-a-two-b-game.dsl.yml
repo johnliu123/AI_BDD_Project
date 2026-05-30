@@ -1,0 +1,98 @@
+dsl_steps:
+  - name: one_a_two_b.game_state.build
+    format: 已存在遊戲 {遊戲ID} 且狀態為 {遊戲狀態}
+    handler: state-builder
+    target_part_path: specs/data/one-a-two-b-game.dbml#games
+    param_bindings:
+      遊戲ID:
+        target: specs/data/one-a-two-b-game.dbml#games.game_id
+      遊戲狀態:
+        target: specs/data/one-a-two-b-game.dbml#games.phase
+    datatable_bindings: {}
+
+  - name: one_a_two_b.player_state.build
+    format: 遊戲 {遊戲ID} 已有玩家 {玩家名稱} 擔任 {玩家角色}
+    handler: state-builder
+    target_part_path: specs/data/one-a-two-b-game.dbml#players
+    param_bindings:
+      遊戲ID:
+        target: specs/data/one-a-two-b-game.dbml#players.game_id
+      玩家名稱:
+        target: specs/data/one-a-two-b-game.dbml#players.player_name
+      玩家角色:
+        target: specs/data/one-a-two-b-game.dbml#players.role
+    datatable_bindings: {}
+
+  - name: one_a_two_b.secret_state.build
+    format: 玩家 {玩家ID} 在遊戲 {遊戲ID} 已設定秘密數字 {秘密數字}
+    handler: state-builder
+    target_part_path: specs/data/one-a-two-b-game.dbml#secrets
+    param_bindings:
+      玩家ID:
+        target: specs/data/one-a-two-b-game.dbml#secrets.player_id
+      遊戲ID:
+        target: specs/data/one-a-two-b-game.dbml#secrets.game_id
+      秘密數字:
+        target: specs/data/one-a-two-b-game.dbml#secrets.secret_value
+    datatable_bindings: {}
+
+  - name: one_a_two_b.secret_change_state.build
+    format: 玩家 {玩家ID} 在遊戲 {遊戲ID} 已修改秘密數字 {修改次數} 次
+    handler: state-builder
+    target_part_path: specs/data/one-a-two-b-game.dbml#secrets
+    param_bindings:
+      玩家ID:
+        target: specs/data/one-a-two-b-game.dbml#secrets.player_id
+      遊戲ID:
+        target: specs/data/one-a-two-b-game.dbml#secrets.game_id
+      修改次數:
+        target: specs/data/one-a-two-b-game.dbml#secrets.change_count
+    datatable_bindings: {}
+
+  - name: one_a_two_b.secret_value.verify
+    format: 玩家 {玩家ID} 在遊戲 {遊戲ID} 的秘密數字應為 {秘密數字}
+    handler: state-verifier
+    target_part_path: specs/data/one-a-two-b-game.dbml#secrets.secret_value
+    param_bindings:
+      玩家ID:
+        target: specs/data/one-a-two-b-game.dbml#secrets.player_id
+      遊戲ID:
+        target: specs/data/one-a-two-b-game.dbml#secrets.game_id
+      秘密數字:
+        target: specs/data/one-a-two-b-game.dbml#secrets.secret_value
+    datatable_bindings: {}
+
+  - name: one_a_two_b.game_phase.verify
+    format: 遊戲 {遊戲ID} 狀態應為 {遊戲狀態}
+    handler: state-verifier
+    target_part_path: specs/data/one-a-two-b-game.dbml#games.phase
+    param_bindings:
+      遊戲ID:
+        target: specs/data/one-a-two-b-game.dbml#games.game_id
+      遊戲狀態:
+        target: specs/data/one-a-two-b-game.dbml#games.phase
+    datatable_bindings: {}
+
+  - name: one_a_two_b.secret_change_count.verify
+    format: 玩家 {玩家ID} 的秘密數字修改次數應為 {修改次數}
+    handler: state-verifier
+    target_part_path: specs/data/one-a-two-b-game.dbml#secrets.change_count
+    param_bindings:
+      玩家ID:
+        target: specs/data/one-a-two-b-game.dbml#secrets.player_id
+      修改次數:
+        target: specs/data/one-a-two-b-game.dbml#secrets.change_count
+    datatable_bindings: {}
+
+  - name: one_a_two_b.guess_record.verify
+    format: 遊戲 {遊戲ID} 應記錄玩家 {玩家ID} 的猜測 {猜測數字}
+    handler: state-verifier
+    target_part_path: specs/data/one-a-two-b-game.dbml#guesses
+    param_bindings:
+      遊戲ID:
+        target: specs/data/one-a-two-b-game.dbml#guesses.game_id
+      玩家ID:
+        target: specs/data/one-a-two-b-game.dbml#guesses.player_id
+      猜測數字:
+        target: specs/data/one-a-two-b-game.dbml#guesses.guess_value
+    datatable_bindings: {}

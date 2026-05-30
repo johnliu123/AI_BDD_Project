@@ -1,0 +1,97 @@
+classDiagram
+    class GameRouter {
+        +enterGame(request)
+        +setSecret(gameId, request)
+        +changeSecret(gameId, playerId, request)
+        +submitGuess(gameId, request)
+    }
+
+    class EnterGameService {
+        +enter_game(gameId, playerName)
+    }
+
+    class SetSecretService {
+        +set_secret(gameId, playerId, secret)
+    }
+
+    class ChangeSecretService {
+        +change_secret(gameId, playerId, secret)
+    }
+
+    class SubmitGuessService {
+        +submit_guess(gameId, playerId, guess)
+    }
+
+    class SecretNumberRules {
+        +validate_four_unique_digits(value)
+        +ensure_p1_then_p2_order(game, player)
+        +ensure_before_guessing(phase)
+        +ensure_change_count_less_than_one(secret)
+    }
+
+    class GuessScoringRules {
+        +validate_guess_format(guess)
+        +score(guess, opponentSecret)
+        +ensure_guessing_phase(phase)
+    }
+
+    class GameRepository {
+        +find_by_game_id(gameId)
+        +create_game(gameId, playerName)
+        +add_player_as_p2(game, playerName)
+        +load_game_with_players_and_secrets(gameId)
+        +load_game_with_secret(gameId, playerId)
+        +load_game_with_opponent_secret(gameId, playerId)
+        +save_secret(playerId, secret)
+        +update_secret_and_increment_change_count(playerId, secret)
+        +save_guess(a, b, isWin)
+        +finish_game_with_winner(playerId)
+    }
+
+    class GameModel {
+        id
+        game_id
+        phase
+        winner_player_id
+    }
+
+    class PlayerModel {
+        id
+        game_id
+        player_name
+        role
+    }
+
+    class SecretModel {
+        id
+        game_id
+        player_id
+        secret_value
+        change_count
+    }
+
+    class GuessModel {
+        id
+        game_id
+        player_id
+        guess_value
+        a_count
+        b_count
+        is_win
+    }
+
+    GameRouter --> EnterGameService
+    GameRouter --> SetSecretService
+    GameRouter --> ChangeSecretService
+    GameRouter --> SubmitGuessService
+    EnterGameService --> GameRepository
+    SetSecretService --> GameRepository
+    SetSecretService --> SecretNumberRules
+    ChangeSecretService --> GameRepository
+    ChangeSecretService --> SecretNumberRules
+    SubmitGuessService --> GameRepository
+    SubmitGuessService --> GuessScoringRules
+    GameRepository --> GameModel
+    GameRepository --> PlayerModel
+    GameRepository --> SecretModel
+    GameRepository --> GuessModel

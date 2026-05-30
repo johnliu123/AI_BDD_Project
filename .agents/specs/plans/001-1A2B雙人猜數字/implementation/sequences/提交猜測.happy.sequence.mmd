@@ -1,0 +1,23 @@
+sequenceDiagram
+    actor Player as 玩家
+    participant API as GuessRouter.submitGuess
+    participant Service as SubmitGuessService
+    participant Rules as GuessScoringRules
+    participant Repo as GameRepository
+    participant DB as games / players / secrets / guesses
+
+    Player->>API: POST /games/{gameId}/guesses(playerId, guess)
+    API->>Service: submit_guess(gameId, playerId, guess)
+    Service->>Repo: load_game_with_opponent_secret(gameId, playerId)
+    Repo->>DB: read game aggregate
+    Service->>Rules: ensure_guessing_phase(game.phase)
+    Service->>Rules: validate_guess_format(guess)
+    Service->>Rules: score(guess, opponentSecret)
+    Service->>Repo: save_guess(a, b, isWin)
+    Repo->>DB: insert guesses
+    alt result is 4A
+        Service->>Repo: finish_game_with_winner(playerId)
+        Repo->>DB: update games.winner_player_id and phase=FINISHED
+    end
+    Service-->>API: GuessResultResponse
+    API-->>Player: 幾A幾B與勝負狀態

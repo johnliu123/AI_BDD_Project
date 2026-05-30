@@ -1,0 +1,18 @@
+sequenceDiagram
+    actor Player as 玩家
+    participant API as GuessRouter.submitGuess
+    participant Service as SubmitGuessService
+    participant Rules as GuessScoringRules
+    participant Repo as GameRepository
+
+    Player->>API: POST /games/{gameId}/guesses(invalid state or guess)
+    API->>Service: submit_guess(gameId, playerId, guess)
+    Service->>Repo: load_game_with_opponent_secret(gameId, playerId)
+    alt game 尚未進入猜題階段
+        Service-->>API: phase error
+        API-->>Player: 400 ErrorResponse
+    else guess 不是有效 4 位數字
+        Service->>Rules: validate_guess_format(guess)
+        Service-->>API: invalid guess error
+        API-->>Player: 400 ErrorResponse
+    end

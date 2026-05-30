@@ -1,0 +1,18 @@
+sequenceDiagram
+    actor Player as 玩家
+    participant API as SecretRouter.setSecret
+    participant Service as SetSecretService
+    participant Rules as SecretNumberRules
+    participant Repo as GameRepository
+
+    Player->>API: POST /games/{gameId}/secrets(invalid secret or wrong order)
+    API->>Service: set_secret(gameId, playerId, secret)
+    Service->>Rules: validate_four_unique_digits(secret)
+    alt secret 不是 4 位數字或數字重複
+        Service-->>API: invalid secret error
+        API-->>Player: 400 ErrorResponse
+    else P2 早於 P1 設定
+        Service->>Repo: load_game_with_players_and_secrets(gameId)
+        Service-->>API: order violation error
+        API-->>Player: 400 ErrorResponse
+    end

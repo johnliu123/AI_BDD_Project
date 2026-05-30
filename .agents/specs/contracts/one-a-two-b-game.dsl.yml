@@ -1,0 +1,97 @@
+dsl_steps:
+  - name: one_a_two_b.enter_game.invoke
+    format: 玩家以遊戲 ID {遊戲ID} 和名稱 {玩家名稱} 進入遊戲
+    handler: operation-invoke
+    target_part_path: specs/contracts/one-a-two-b-game.api.yml#/paths/~1games/post
+    param_bindings:
+      遊戲ID:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/EnterGameRequest/properties/gameId
+      玩家名稱:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/EnterGameRequest/properties/playerName
+    datatable_bindings: {}
+
+  - name: one_a_two_b.set_secret.invoke
+    format: 玩家 {玩家ID} 在遊戲 {遊戲ID} 設定秘密數字 {秘密數字}
+    handler: operation-invoke
+    target_part_path: specs/contracts/one-a-two-b-game.api.yml#/paths/~1games~1{gameId}~1secrets/post
+    param_bindings:
+      玩家ID:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/SetSecretRequest/properties/playerId
+      遊戲ID:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/parameters/GameIdPath
+      秘密數字:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/SetSecretRequest/properties/secret
+    datatable_bindings: {}
+
+  - name: one_a_two_b.change_secret.invoke
+    format: 玩家 {玩家ID} 在遊戲 {遊戲ID} 修改秘密數字為 {秘密數字}
+    handler: operation-invoke
+    target_part_path: specs/contracts/one-a-two-b-game.api.yml#/paths/~1games~1{gameId}~1secrets~1{playerId}/patch
+    param_bindings:
+      玩家ID:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/parameters/PlayerIdPath
+      遊戲ID:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/parameters/GameIdPath
+      秘密數字:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/ChangeSecretRequest/properties/secret
+    datatable_bindings: {}
+
+  - name: one_a_two_b.submit_guess.invoke
+    format: 玩家 {玩家ID} 在遊戲 {遊戲ID} 提交猜測 {猜測數字}
+    handler: operation-invoke
+    target_part_path: specs/contracts/one-a-two-b-game.api.yml#/paths/~1games~1{gameId}~1guesses/post
+    param_bindings:
+      玩家ID:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/SubmitGuessRequest/properties/playerId
+      遊戲ID:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/parameters/GameIdPath
+      猜測數字:
+        target: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/SubmitGuessRequest/properties/guess
+    datatable_bindings: {}
+
+  - name: one_a_two_b.guess_result.verify_response
+    format: 猜測回應應為 {A數}A{B數}B
+    handler: operation-response-success-and-failure
+    target_part_path: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/GuessResultResponse
+    param_bindings:
+      A數:
+        target: response:$.a
+      B數:
+        target: response:$.b
+    datatable_bindings: {}
+
+  - name: one_a_two_b.winner.verify_response
+    format: 勝者應為玩家 {玩家ID}
+    handler: operation-response-success-and-failure
+    target_part_path: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/GuessResultResponse/properties/winnerId
+    param_bindings:
+      玩家ID:
+        target: response:$.winnerId
+    datatable_bindings: {}
+
+  - name: one_a_two_b.enter_game_role.verify_response
+    format: 進入遊戲回應角色應為 {玩家角色}
+    handler: operation-response-success-and-failure
+    target_part_path: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/EnterGameResponse/properties/role
+    param_bindings:
+      玩家角色:
+        target: response:$.role
+    datatable_bindings: {}
+
+  - name: one_a_two_b.response_phase.verify_response
+    format: 回應遊戲狀態應為 {遊戲狀態}
+    handler: operation-response-success-and-failure
+    target_part_path: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/GamePhase
+    param_bindings:
+      遊戲狀態:
+        target: response:$.phase
+    datatable_bindings: {}
+
+  - name: one_a_two_b.error_message.verify_response
+    format: 錯誤訊息應為 {錯誤訊息}
+    handler: operation-response-success-and-failure
+    target_part_path: specs/contracts/one-a-two-b-game.api.yml#/components/schemas/ErrorResponse/properties/message
+    param_bindings:
+      錯誤訊息:
+        target: response:$.message
+    datatable_bindings: {}

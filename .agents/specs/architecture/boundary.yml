@@ -1,0 +1,6 @@
+version: 2
+id: "one-a-two-b-game"
+level: 1
+role: backend
+type: web-service
+description: "one-a-two-b-game Python FastAPI backend service"

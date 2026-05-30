@@ -1,0 +1,39 @@
+{
+  "kind": "behavior_test_report",
+  "status": "red",
+  "runner": "behave",
+  "command": "python -m behave tests/features",
+  "environment_overrides": ["PYTHONUTF8=1", "TESTCONTAINERS_RYUK_DISABLED=true"],
+  "exit_code": 1,
+  "target_feature_files": [
+    "tests/features/01-雙人猜數字對戰/02-設定秘密數字.feature"
+  ],
+  "summary": {
+    "features_passed": 2,
+    "features_failed": 1,
+    "features_skipped": 0,
+    "rules_passed": 9,
+    "rules_failed": 6,
+    "rules_skipped": 0,
+    "scenarios_passed": 13,
+    "scenarios_failed": 10,
+    "scenarios_skipped": 0,
+    "steps_passed": 80,
+    "steps_failed": 10,
+    "steps_skipped": 2
+  },
+  "runner_visibility": {
+    "dry_run_command": "python -m behave --dry-run tests/features",
+    "dry_run_exit_code": 0,
+    "target_feature_visible": true,
+    "target_steps_bound": true,
+    "undefined_steps": 0
+  },
+  "first_failure": {
+    "type": "assertion_failed",
+    "location": "tests/features/01-雙人猜數字對戰/02-設定秘密數字.feature:6",
+    "message": "Expected message '遊戲必須已滿兩位玩家', got 'Not Found'; body={'detail': 'Not Found', '__http': {'status_class': 'failure', 'status_code': 404}}"
+  },
+  "failure_classification": "value_difference",
+  "legal_red_reason": "POST /api/games/{gameId}/secrets is not implemented yet, so public API calls return 404 Not Found instead of the specified secret-setting responses."
+}

@@ -1,0 +1,35 @@
+{
+  "kind": "behavior_test_report",
+  "runner": "behave",
+  "command": "python -m behave tests/features",
+  "environment_overrides": ["PYTHONUTF8=1", "TESTCONTAINERS_RYUK_DISABLED=true"],
+  "target_feature_files": [
+    "tests/features/01-雙人猜數字對戰/01-進入遊戲配對.feature"
+  ],
+  "summary": {
+    "features_passed": 1,
+    "features_failed": 1,
+    "scenarios_passed": 1,
+    "scenarios_failed": 12,
+    "steps_passed": 26,
+    "steps_failed": 12,
+    "steps_skipped": 2
+  },
+  "scenario_reports": [
+    {
+      "feature_file": "tests/features/01-雙人猜數字對戰/01-進入遊戲配對.feature",
+      "scenario": "拒絕不符合長度或字元限制的遊戲 ID -- @1.1",
+      "outcome": "failed",
+      "failing_step": "Then 錯誤訊息應為 遊戲 ID 必須為 3-5 位字母或數字",
+      "failure_type": "assertion_failed",
+      "message": "Expected message '遊戲 ID 必須為 3-5 位字母或數字', got 'Not Found'; body={'detail': 'Not Found', '__http': {'status_class': 'failure', 'status_code': 404}}",
+      "location": "tests/features/01-雙人猜數字對戰/01-進入遊戲配對.feature:12"
+    }
+  ],
+  "first_failure": {
+    "type": "assertion_failed",
+    "location": "tests/features/01-雙人猜數字對戰/01-進入遊戲配對.feature:12",
+    "message": "Expected message '遊戲 ID 必須為 3-5 位字母或數字', got 'Not Found'; body={'detail': 'Not Found', '__http': {'status_class': 'failure', 'status_code': 404}}"
+  },
+  "report_path": "specs/plans/001-1A2B雙人猜數字/reports/red-behavior-report-01-進入遊戲配對.json"
+}

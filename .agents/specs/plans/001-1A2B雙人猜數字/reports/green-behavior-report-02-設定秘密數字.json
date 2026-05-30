@@ -1,0 +1,54 @@
+{
+  "kind": "green_behavior_report",
+  "status": "passed",
+  "phase": "Phase 3 - 設定秘密數字 / GREEN",
+  "runner": "behave",
+  "command": "python -m behave tests/features",
+  "environment_overrides": ["PYTHONUTF8=1", "TESTCONTAINERS_RYUK_DISABLED=true"],
+  "exit_code": 0,
+  "summary": {
+    "features_passed": 3,
+    "features_failed": 0,
+    "features_skipped": 0,
+    "rules_passed": 15,
+    "rules_failed": 0,
+    "rules_skipped": 0,
+    "scenarios_passed": 23,
+    "scenarios_failed": 0,
+    "scenarios_skipped": 0,
+    "steps_passed": 92,
+    "steps_failed": 0,
+    "steps_skipped": 0
+  },
+  "target_feature_files": [
+    "specs/packages/01-雙人猜數字對戰/features/02-設定秘密數字.feature"
+  ],
+  "runtime_feature_files": [
+    "tests/features/01-雙人猜數字對戰/02-設定秘密數字.feature"
+  ],
+  "red_evidence_refs": {
+    "red_handoff_path": "specs/plans/001-1A2B雙人猜數字/reports/red-handoff-02-設定秘密數字.json",
+    "red_evaluation_path": "specs/plans/001-1A2B雙人猜數字/reports/red-evaluation-02-設定秘密數字.json",
+    "red_behavior_report_path": "specs/plans/001-1A2B雙人猜數字/reports/red-behavior-report-02-設定秘密數字.json",
+    "legal_red_verdict": "PASS",
+    "green_allowed": true
+  },
+  "baseline_red_failure": {
+    "classification": "value_difference",
+    "first_failure": "POST /api/games/{gameId}/secrets returned 404 Not Found instead of specified secret-setting behavior"
+  },
+  "implemented_behavior": [
+    "POST /api/games/{gameId}/secrets validates the game is in SETTING_SECRETS with two players",
+    "secret values must be four unique digits",
+    "P2 cannot set before P1 has set a secret",
+    "valid secrets are persisted with change_count 0",
+    "when both players have secrets, the game phase transitions to GUESSING"
+  ],
+  "product_files_modified": [
+    "app/api/games.py",
+    "app/repositories/game_repository.py",
+    "app/schemas/game.py",
+    "app/services/set_secret_service.py"
+  ],
+  "stop_reason": "none"
+}

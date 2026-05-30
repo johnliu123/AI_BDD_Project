@@ -1,0 +1,9 @@
+specformula:
+  version: '1.0'
+project:
+  name: .agents
+spectrace:
+  enabled: true
+directoryMarkings:
+  spec-root:
+    - specs

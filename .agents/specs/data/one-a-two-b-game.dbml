@@ -1,0 +1,44 @@
+Table games {
+  id integer [pk, increment]
+  game_id varchar [not null, unique]
+  phase varchar [not null]
+  winner_player_id integer [ref: > players.id]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+
+  Note: 'aggregate_root: one 1A2B game lifecycle from pairing to finish'
+}
+
+Table players {
+  id integer [pk, increment]
+  game_id integer [not null, ref: > games.id]
+  player_name varchar [not null]
+  role varchar [not null]
+  joined_at timestamp [not null]
+
+  indexes {
+    (game_id, player_name) [unique]
+    (game_id, role) [unique]
+  }
+}
+
+Table secrets {
+  id integer [pk, increment]
+  game_id integer [not null, ref: > games.id]
+  player_id integer [not null, ref: > players.id, unique]
+  secret_value varchar [not null]
+  change_count integer [not null, default: 0]
+  set_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table guesses {
+  id integer [pk, increment]
+  game_id integer [not null, ref: > games.id]
+  player_id integer [not null, ref: > players.id]
+  guess_value varchar [not null]
+  a_count integer [not null]
+  b_count integer [not null]
+  is_win boolean [not null, default: false]
+  guessed_at timestamp [not null]
+}

@@ -1,0 +1,46 @@
+{
+  "kind": "red_behavior_report",
+  "status": "failed_as_expected",
+  "phase": "Phase 4 - 修改秘密數字 / RED",
+  "runner": "behave",
+  "command": "python -m behave tests/features/01-雙人猜數字對戰/03-修改秘密數字.feature",
+  "environment_overrides": [
+    "PYTHONUTF8=1",
+    "TESTCONTAINERS_RYUK_DISABLED=true"
+  ],
+  "exit_code": 1,
+  "summary": {
+    "features_passed": 0,
+    "features_failed": 1,
+    "features_skipped": 0,
+    "rules_passed": 0,
+    "rules_failed": 6,
+    "rules_skipped": 0,
+    "scenarios_passed": 0,
+    "scenarios_failed": 10,
+    "scenarios_skipped": 0,
+    "steps_passed": 51,
+    "steps_failed": 10,
+    "steps_skipped": 1
+  },
+  "target_feature_files": [
+    "specs/packages/01-雙人猜數字對戰/features/03-修改秘密數字.feature",
+    "tests/features/01-雙人猜數字對戰/03-修改秘密數字.feature"
+  ],
+  "step_definition_files": [
+    "tests/features/steps/雙人猜數字對戰/change_secret_steps.py"
+  ],
+  "failure_signature": {
+    "type": "missing_product_implementation",
+    "representative_failure": "PATCH /api/games/{gameId}/secrets/{playerId} returned 404 Not Found instead of the expected domain response.",
+    "first_failed_scenario": "進入猜題階段後不得修改秘密答案",
+    "expected_message": "進入猜題階段後不得修改秘密答案",
+    "actual_message": "Not Found"
+  },
+  "red_validity_notes": [
+    "All Phase 4 scenarios and steps are bound to executable step definitions; there are no undefined step failures.",
+    "The failure is a value/route behavior gap in product code: the change-secret endpoint has not been implemented yet.",
+    "Existing setup steps reuse the game/player/secret fixtures from previous phases."
+  ],
+  "stop_reason": "expected_red_failure_observed"
+}

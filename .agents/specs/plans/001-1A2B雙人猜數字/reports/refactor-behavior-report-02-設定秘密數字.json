@@ -1,0 +1,39 @@
+{
+  "kind": "refactor_behavior_report",
+  "status": "passed",
+  "phase": "Phase 3 - 設定秘密數字 / REFACTOR",
+  "runner": "behave",
+  "command": "python -m behave tests/features",
+  "environment_overrides": [
+    "PYTHONUTF8=1",
+    "TESTCONTAINERS_RYUK_DISABLED=true"
+  ],
+  "exit_code": 0,
+  "summary": {
+    "features_passed": 3,
+    "features_failed": 0,
+    "features_skipped": 0,
+    "rules_passed": 15,
+    "rules_failed": 0,
+    "rules_skipped": 0,
+    "scenarios_passed": 23,
+    "scenarios_failed": 0,
+    "scenarios_skipped": 0,
+    "steps_passed": 92,
+    "steps_failed": 0,
+    "steps_skipped": 0
+  },
+  "target_feature_files": [
+    "specs/packages/01-雙人猜數字對戰/features/02-設定秘密數字.feature"
+  ],
+  "applied_moves": [
+    {
+      "id": "merge_secret_format_error_guard",
+      "type": "structural_simplification",
+      "file": "app/services/set_secret_service.py",
+      "description": "Merged duplicate secret-format validation error branches into one guard without changing the error message or validation semantics."
+    }
+  ],
+  "reverted_moves": [],
+  "stop_reason": "none"
+}

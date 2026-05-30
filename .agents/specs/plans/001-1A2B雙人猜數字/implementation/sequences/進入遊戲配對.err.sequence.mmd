@@ -1,0 +1,21 @@
+sequenceDiagram
+    actor Player as 玩家
+    participant API as GameRouter.enterGame
+    participant Service as EnterGameService
+    participant Repo as GameRepository
+    participant DB as games / players
+
+    Player->>API: POST /games(invalid or duplicate/full)
+    API->>Service: enter_game(gameId, playerName)
+    Service->>Repo: find_by_game_id(gameId)
+    Repo->>DB: read games, players
+    alt gameId 或 playerName 格式不合法
+        Service-->>API: validation error
+        API-->>Player: 400 ErrorResponse
+    else 同一玩家重複加入
+        Service-->>API: duplicate player error
+        API-->>Player: 400 ErrorResponse
+    else game 已滿
+        Service-->>API: game full error
+        API-->>Player: 409 ErrorResponse("該遊戲已滿，請選擇其他遊戲")
+    end

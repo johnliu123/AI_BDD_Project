@@ -1,0 +1,51 @@
+{
+  "status": "completed",
+  "phase": "Phase 4 - 修改秘密數字 / RED",
+  "task_id": "red-execute-03-change-secret",
+  "source_feature_file": "specs/packages/01-雙人猜數字對戰/features/03-修改秘密數字.feature",
+  "runtime_feature_file": "tests/features/01-雙人猜數字對戰/03-修改秘密數字.feature",
+  "behavior_test_report": {
+    "report_path": "specs/plans/001-1A2B雙人猜數字/reports/red-behavior-report-03-修改秘密數字.json",
+    "runner": "behave",
+    "command": "python -m behave tests/features/01-雙人猜數字對戰/03-修改秘密數字.feature",
+    "environment_overrides": [
+      "PYTHONUTF8=1",
+      "TESTCONTAINERS_RYUK_DISABLED=true"
+    ],
+    "exit_code": 1,
+    "summary": {
+      "features_passed": 0,
+      "features_failed": 1,
+      "features_skipped": 0,
+      "rules_passed": 0,
+      "rules_failed": 6,
+      "rules_skipped": 0,
+      "scenarios_passed": 0,
+      "scenarios_failed": 10,
+      "scenarios_skipped": 0,
+      "steps_passed": 51,
+      "steps_failed": 10,
+      "steps_skipped": 1
+    }
+  },
+  "runtime_refs_snapshot": {
+    "acceptance_runner": ".aibdd/bdd-stack/acceptance-runner.md",
+    "step_definitions": ".aibdd/bdd-stack/step-definitions.md",
+    "fixtures": ".aibdd/bdd-stack/fixtures.md",
+    "feature_archive": ".aibdd/bdd-stack/feature-archive.md",
+    "pre_red_hook": ".aibdd/bdd-stack/prehandling-before-red-phase.md"
+  },
+  "files_created": [
+    "tests/features/01-雙人猜數字對戰/03-修改秘密數字.feature",
+    "tests/features/steps/雙人猜數字對戰/change_secret_steps.py"
+  ],
+  "files_modified": [],
+  "expected_product_gap": {
+    "endpoint": "PATCH /api/games/{gameId}/secrets/{playerId}",
+    "current_observed_behavior": "404 Not Found",
+    "green_target": "Implement ChangeSecretService.change_secret(gameId, playerId, secret) and route it through the game API."
+  },
+  "scope_history": [],
+  "stop_reason": "expected_red_failure_observed",
+  "next_recommended_command": "/aibdd-red-evaluate"
+}

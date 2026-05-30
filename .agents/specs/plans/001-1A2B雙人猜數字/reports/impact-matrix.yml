@@ -1,0 +1,12 @@
+plan_package: specs/plans/001-1A2B雙人猜數字
+function_packages:
+  - path: specs/packages/01-雙人猜數字對戰
+    change_type: new-package
+    features:
+      - specs/packages/01-雙人猜數字對戰/features/01-進入遊戲配對.feature
+      - specs/packages/01-雙人猜數字對戰/features/02-設定秘密數字.feature
+      - specs/packages/01-雙人猜數字對戰/features/03-修改秘密數字.feature
+      - specs/packages/01-雙人猜數字對戰/features/04-提交猜測.feature
+source:
+  plan_spec: specs/plans/001-1A2B雙人猜數字/spec.md
+  discovery_report: specs/plans/001-1A2B雙人猜數字/reports/discovery-sourcing.md

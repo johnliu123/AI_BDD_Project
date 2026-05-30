@@ -1,0 +1,21 @@
+sequenceDiagram
+    actor Player as 玩家
+    participant API as SecretRouter.changeSecret
+    participant Service as ChangeSecretService
+    participant Rules as SecretNumberRules
+    participant Repo as GameRepository
+
+    Player->>API: PATCH /games/{gameId}/secrets/{playerId}(invalid timing/count/secret)
+    API->>Service: change_secret(gameId, playerId, secret)
+    Service->>Repo: load_game_with_secret(gameId, playerId)
+    alt game 已進入猜題階段
+        Service-->>API: change not allowed error
+        API-->>Player: 400 ErrorResponse
+    else 已修改過一次
+        Service-->>API: change limit error
+        API-->>Player: 400 ErrorResponse
+    else secret 格式不合法
+        Service->>Rules: validate_four_unique_digits(secret)
+        Service-->>API: invalid secret error
+        API-->>Player: 400 ErrorResponse
+    end
